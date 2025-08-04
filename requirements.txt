@@ -10,3 +10,4 @@ openai
 gTTS
 streamlit-webrtc
 SpeechRecognition
+faiss-cpu

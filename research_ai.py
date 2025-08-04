@@ -3,16 +3,14 @@ import fitz  # PyMuPDF
 import requests
 from bs4 import BeautifulSoup
 import os
-import pyttsx3
+from gtts import gTTS
+import base64
 import speech_recognition as sr
 from streamlit_webrtc import webrtc_streamer, AudioProcessorBase
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAI
 from langchain.chains import RetrievalQA
 import langchain_openai
-
-# Initialize Text-to-Speech Engine
-engine = pyttsx3.init()
 
 st.title("Arnav AI — Research Assistant (Voice + Web + PDF)")
 
@@ -70,6 +68,10 @@ if texts and final_query:
     result = qa_chain.run(final_query)
     st.write("Answer:", result)
 
-    # AI Speaks Answer
-    engine.say(result)
-    engine.runAndWait()
+    # AI Speaks Answer using gTTS
+    tts = gTTS(result)
+    tts.save("response.mp3")
+
+    audio_file = open("response.mp3", "rb")
+    audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format="audio/mp3")
